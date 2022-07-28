@@ -1,5 +1,14 @@
 .App {
   text-align: center;
+  font-family: 'Times new roman', cursive;
+  padding:0;
+  margin:0;
+  background-image: url(../public/imagen.webp);
+  opacity: 0.8;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover ;
+  background-attachment: fixed;
 }
 
 .App-logo {

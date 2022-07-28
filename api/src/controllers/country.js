@@ -25,7 +25,10 @@ async function getApi() {
   }
 }
 
-async function getAllToDb(req, res) {
+async function getAllToDb(req, res, next) {
+  try {
+    
+   
   const countryApi = await getApi();
   countryApi.forEach((el) => {
     Country.findOrCreate({
@@ -49,80 +52,36 @@ async function getAllToDb(req, res) {
       continent: el.continent,
     };
   });
-  importantInfo.length
-    ? res.status(200).send(importantInfo)
-    : res.status(404).send("ERROR");
+  importantInfo.length ? res.send(importantInfo) : res.send("ERROR");
+  console.log(importantInfo)}
+  catch (error) {
+    next
+  }
 }
-async function getByName() {
-  const name = req.query.name;
-  const countries = getAllToDb();
-  const filteredCountries = countries.filter(
-    (c) => c.name.toLowerCase() == name.toLowerCase()
-  );
-  console.log(filteredCountries);
-  filteredCountries.length
-    ? res.status(200).send(filteredCountries)
-    : res.status(404).send("ERROR");
+
+async function getByName(req, res) {
+  const { name } = req.query;
+  try {
+    var countryName = await getAllToDb(name).filter((el) =>
+      el.name.toLowerCase().includes(name.toLowerCase())
+    );
+    countryName.length
+      ? res.status(200).send(countryName)
+      : res.status(404).send("Country does't exist...");
+  } catch (error) {
+    console.log(error);
+  }
 }
-//   if (req.query.name) {
-//     console.log("toy aca");
-//     const searchCountry = importantInfo.filter(
-//       (country) =>
-//         //el.name.toLowerCase().includes(req.query.name.toLowerCase())
-//         req.query.name.toLowerCase() == country.name.toLowerCase()
-//     );
-//     searchCountry.length
-//       ? res.status(200).send(searchCountry)
-//       : res.status(404).send("Dont match");
-//   } else res.status(200).send(importantInfo);
-// }
 
 async function getById(req, res) {
   const { id } = req.params;
   const allCountries = await getAllToDb();
+  console.log(allCountries)
   if (id) {
     const idCountry = allCountries.filter((c) => c.id == id.toUpperCase());
     idCountry.length
       ? res.send(idCountry)
-      : res.status(404).send("Country does not exist...");
-  }
-}
-
-// async function getByName(req, res) {
-//   const { name } = req.query;
-//   const totalCountries = await getAllToDb();
-//   if (name) {
-//     const countryName = totalCountries.filter((el) => el.name == name);
-//     console.log("estoy aca");
-//     res.send(countryName);
-//   } else {
-//     //res.send(totalCountries);
-//     console.log("algo esta mal");
-//   }
-//   // countryName = await axios.get(`https://restcountries.com/v3/name/${name}`)
-// }
-
-async function postActivity(req, res) {
-  try {
-    let { name, difficulty, duration, season, countryName } = req.body;
-    let country = await Country.findAll({
-      where: { name: countryName },
-    });
-    country=country[0] 
-    console.log(country)
-
-    let newActivity = await Activities.create({
-      name,
-      difficulty,
-      duration,
-      season,
-    });
-    country.addActivities(newActivity);
-
-    res.send("Created!");
-    // console.log(actCreated);
-  } catch (error) {
-    console.log(error);
+      : res.status(404).send("Country does't exist...");
   }
 }
 
@@ -131,4 +90,3 @@ module.exports = {
   getById,
   getByName,
 };
-

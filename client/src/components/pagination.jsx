@@ -10,7 +10,7 @@ const styles = {
       backgroundColor: "rgba(80, 80, 80, 0.473)",
     },
     li: {
-      padding: "1rem",
+      padding: "8px",
       borderadius: "20%",
       cursor: "pointer",
     },

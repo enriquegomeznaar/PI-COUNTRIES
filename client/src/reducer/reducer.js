@@ -3,10 +3,14 @@ import {
   FILTER_POPULATION,
   FILTER_SORT,
   GET_COUNTRIES,
+  GET_BY_NAME,
+  POST_ACTIVITY,
+  GET_ACTIVITIES,
 } from "../actions/actions";
 const initialState = {
   countries: [],
   allCountries: [],
+  activities:[],
 };
 export default function rootReducer(state = initialState, action) {
   switch (action.type) {
@@ -16,6 +20,20 @@ export default function rootReducer(state = initialState, action) {
         countries: action.payload,
         allCountries: action.payload,
       };
+      case GET_ACTIVITIES:
+        return{
+          ...state,
+          activities: action.payload
+        }
+    case GET_BY_NAME:
+      return {
+        ...state,
+        countries: action.payload
+      }
+      case POST_ACTIVITY:
+        return {
+          ...state
+        }
     case FILTER_SORT:
       const sortArr =
         action.payload === "asc"
@@ -43,30 +61,14 @@ export default function rootReducer(state = initialState, action) {
         countries: action.payload === "default" ? state.allCountries : sortArr,
       };
     case FILTER_POPULATION:
-      const sortPop =
-        action.payload === "hi"
-          ? state.allCountries.sort(function (a, b) {
-              if (a.population > b.population) {
-                return -1;
-              }
-              if (a.population < b.population) {
-                return 1;
-              }
-              return 0;
-            })
-          : state.allCountries.sort(function (a, b) {
-              if (a.population > b.population) {
-                return 1;
-              }
-              if (a.population < b.population) {
-                return -1;
-              }
-              return 0;
-            });
-
+      let sortPop = state.allCountries.sort(function (a, b) {
+        return a.population - b.population;
+      });
+      if (action.payload === "low") sortPop = sortPop.reverse();
+      console.log(sortPop);
       return {
         ...state,
-        countries: action.payload === "default" ? state.allCountries : sortPop,
+        countries: sortPop,
       };
     case FILTER_BY_CONTINENT:
       const allCountries = state.countries;
