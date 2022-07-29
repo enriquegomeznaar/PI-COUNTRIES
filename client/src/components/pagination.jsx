@@ -27,8 +27,8 @@ export default function Pagination({
   pagination,
 }) {
   const pageNumber = [];
-
-  for (let i = 0; i <= Math.ceil(allCountries / countriesPerPage); i++) {
+  
+  for (let i = 0; i <= Math.floor(allCountries / countriesPerPage); i++) {
     pageNumber.push(i + 1);
   }
     return (

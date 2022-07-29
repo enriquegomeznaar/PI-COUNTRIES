@@ -10,7 +10,7 @@ import {
 const initialState = {
   countries: [],
   allCountries: [],
-  activities:[],
+  activities: [],
 };
 export default function rootReducer(state = initialState, action) {
   switch (action.type) {
@@ -20,20 +20,20 @@ export default function rootReducer(state = initialState, action) {
         countries: action.payload,
         allCountries: action.payload,
       };
-      case GET_ACTIVITIES:
-        return{
-          ...state,
-          activities: action.payload
-        }
+    case GET_ACTIVITIES:
+      return {
+        ...state,
+        activities: action.payload,
+      };
     case GET_BY_NAME:
       return {
         ...state,
-        countries: action.payload
-      }
-      case POST_ACTIVITY:
-        return {
-          ...state
-        }
+        countries: action.payload,
+      };
+    case POST_ACTIVITY:
+      return {
+        ...state,
+      };
     case FILTER_SORT:
       const sortArr =
         action.payload === "asc"
@@ -61,15 +61,36 @@ export default function rootReducer(state = initialState, action) {
         countries: action.payload === "default" ? state.allCountries : sortArr,
       };
     case FILTER_POPULATION:
-      let sortPop = state.allCountries.sort(function (a, b) {
-        return a.population - b.population;
-      });
-      if (action.payload === "low") sortPop = sortPop.reverse();
-      console.log(sortPop);
-      return {
-        ...state,
-        countries: sortPop,
-      };
+      const filter = action.payload;
+      switch (filter) {
+        case "low":
+          const copyState = { ...state };
+          copyState.allCountries.sort(function (a, b) {
+            return a.population - b.population;
+          });
+
+          return copyState;
+
+        case "high":
+          const copyState2 = { ...state };
+          copyState2.allCountries.sort(function (a, b) {
+            return b.population - a.population;
+          });
+          return copyState2;
+
+        default:
+          return state;
+      }
+    // let sortPop = state.allCountries.sort(function (a, b) {
+    //   return a.population - b.population;
+
+    // });
+    // if (action.payload === "low") sortPop = sortPop.reverse();
+    // console.log(sortPop);
+    // return {
+    //   ...state,
+    //   countries: sortPop,
+    // };
     case FILTER_BY_CONTINENT:
       const allCountries = state.countries;
       const filterByContinent =

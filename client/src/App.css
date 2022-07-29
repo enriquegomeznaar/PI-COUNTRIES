@@ -9,6 +9,10 @@
   background-position: center;
   background-size: cover ;
   background-attachment: fixed;
+  min-height: 100vh;
+}
+.div-contenedor{
+  height: 100vh;
 }
 
 .App-logo {

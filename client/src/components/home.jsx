@@ -28,7 +28,7 @@ const styles = {
   },
   link: {
     color: "#CCCCCC",
-    fontSize: "25px",
+    fontSize: "20px",
     borderRadius: "20px",
     padding: "10px",
     letterSpacing: "5px",
@@ -64,10 +64,16 @@ export default function Home() {
   const pagination = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+  // useEffect(()=>{
+
+  // }, [allCountries])
 
   useEffect(() => {
     dispatch(getCountries());
   }, [dispatch]);
+  useEffect(()=>{
+    console.log(allCountries,'allcountries')
+  }, [allCountries])
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -141,7 +147,7 @@ export default function Home() {
       </div>
 
       <div style={styles.cards}>
-        {currentCountries.length
+        {currentCountries?.length
           ? currentCountries.map((c) => {
               return (
                 <Card name={c.name} flag={c.flag} continent={c.continent} />

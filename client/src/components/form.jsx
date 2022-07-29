@@ -2,12 +2,23 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postActivity } from "../actions/actions";
+import { getCountries, postActivity } from "../actions/actions";
 
-export function Form() {
+const styles = {
+  label: {
+    fontWeight: "bold",
+  },
+  error: {
+    fontFamily: "Times new roman",
+    color: "red",
+    fontSize: "15px",
+  },
+};
+export default function Form() {
   const dispatch = useDispatch();
   const history = useHistory();
   const activities = useSelector((state) => state.activities);
+  const countries = useSelector((state) => state.countries);
   const [errors, setErrors] = useState({});
 
   const [input, setInput] = useState({
@@ -15,13 +26,27 @@ export function Form() {
     difficulty: [],
     duration: 0,
     season: [],
+    countries: [],
   });
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setInput({
       ...input,
       [e.target.name]: e.target.value,
     });
+    setErrors(
+      validate({
+        ...input,
+        [e.target.name]: e.target.value,
+      })
+    );
+  };
+  const handlerSelect = (e) => {
+    setInput({
+      ...input,
+      countries: [...input.countries, e.target.value],
+    });
+  };
 
   const handlerSubmit = (e) => {
     e.preventDefault();
@@ -35,46 +60,98 @@ export function Form() {
     });
     history.push("/home");
   };
+  function validate(input) {
+    let errors = {};
+
+    if (!input.name) {
+      errors.name = "name is require";
+    } else if (!input.difficulty) {
+      errors.difficulty = "introduce the difficulty";
+    } else if (!input.duration) {
+      errors.duration = "introduce duration";
+    } else if (!input.season) {
+      errors.season = "select a season";
+    }
+    return errors;
+  }
+
   return (
     <div>
       <Link to="/home">Go back</Link>
       <h1>Create your activity</h1>
       <form onSubmit={(e) => handlerSubmit(e)}>
         <div>
-          <label>Activity name:</label>
+          <label style={styles.label}>Activity name: </label>
           <input
             type="text"
             value={input.name}
             name="name"
             onChange={(e) => handleChange(e)}
           />
+          {errors.name && <p style={styles.error}>{errors.name}</p>}
         </div>
         <div>
-          <label>Difficulty:</label>
+          <label style={styles.label}>Difficulty: </label>
           <input
-            type="text"
-            value={input.difficulty}
+            type="number"
             name="difficulty"
+            min="1"
+            max="5"
             onChange={(e) => handleChange(e)}
+            value={input.difficulty}
           />
+          {errors.difficulty && <p style={styles.error}>{errors.difficulty}</p>}
         </div>
         <div>
-          <label>Duration:</label>
+          <label style={styles.label}>Duration: </label>
           <input
-            type="text"
-            value={input.duration}
+            type="time"
             name="duration"
             onChange={(e) => handleChange(e)}
+            value={input.duration}
+          />
+          {errors.duration && <p style={styles.error}>{errors.duration}</p>}
+        </div>
+        <div>
+          <label style={styles.label}>Season </label>
+
+          <label> Summer:</label>
+          <input
+            type="checkbox"
+            value="summer"
+            name="summer"
+            onChange={(e) => handleChange(e)}
+          />
+          <label> Spring:</label>
+          <input
+            type="checkbox"
+            value="spring"
+            name="spring"
+            onChange={(e) => handleChange(e)}
+          />
+          <label> Winter:</label>
+          <input
+            type="checkbox"
+            value="winter"
+            name="winter"
+            onChange={(e) => handleChange(e)}
+          />
+          <label> Fall:</label>
+          <input
+            type="checkbox"
+            value="fall"
+            name="fall"
+            onChange={(e) => handleChange(e)}
           />
         </div>
         <div>
-          <label>Season:</label>
-          <input
-            type="text"
-            value={input.season}
-            name="season"
-            onChange={(e) => handleChange(e)}
-          />
+          <label style={styles.label}>Where?</label>
+          <select onChange={(e) => handlerSelect(e)}>
+            {console.log(countries)}
+            {countries.map((d) => (
+              <option value={d.name}>{d.name}</option>
+            ))}
+          </select>
         </div>
         <div>
           <button type="submit">Create</button>

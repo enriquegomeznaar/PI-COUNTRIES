@@ -32,9 +32,13 @@ export default function SearchBar() {
 
   const handlerInput = (e) => {
     e.preventDefault();
-    setName(e.target.value.toLowerCase());
-    console.log(name);
+    const value = e.target.value
+    const value2 = value.charAt(0).toUpperCase() + value.slice(1)
+    setName(value2);
+    console.log(value2);
   };
+//   const str = 'flexiple';
+// const str2 = str.charAt(0).toUpperCase() + str.slice(1);
   const handlerButton = (e) => {
     e.preventDefault();
     dispatch(getByName(name));

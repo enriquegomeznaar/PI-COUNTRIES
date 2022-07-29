@@ -2,7 +2,7 @@ import './App.css';
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import LandingPage from './components/landing';
 import Home from './components/home';
-import { Form } from './components/form';
+import  Form  from './components/form';
 
 function App() {
   return (

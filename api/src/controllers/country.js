@@ -1,6 +1,7 @@
 const axios = require("axios");
 const { Country, Activities } = require("../db");
 const url = "https://restcountries.com/v3/all";
+const { Op } = require("sequelize");
 
 async function getApi() {
   try {
@@ -27,12 +28,9 @@ async function getApi() {
 
 async function getAllToDb(req, res, next) {
   try {
-    
-   
-  const countryApi = await getApi();
-  countryApi.forEach((el) => {
-    Country.findOrCreate({
-      where: {
+    const countryApi = await getApi();
+    countryApi.forEach((el) => {
+      Country.create({
         id: el.id,
         name: el.name,
         flag: el.flag,
@@ -41,52 +39,40 @@ async function getAllToDb(req, res, next) {
         subregion: el.subregion ? el.subregion : "dont have any...",
         area: el.area,
         population: el.population,
-      },
+      });
     });
-  });
-  const bdCountry = await Country.findAll();
-  const importantInfo = bdCountry.map((el) => {
-    return {
-      flag: el.flag,
-      name: el.name,
-      continent: el.continent,
-    };
-  });
-  importantInfo.length ? res.send(importantInfo) : res.send("ERROR");
-  console.log(importantInfo)}
-  catch (error) {
-    next
+   
+  } catch (error) {
+    next;
   }
+}
+async function getAllCountries(req, res) {
+  const bdCountry = await Country.findAll({
+    attributes: ["flag", "name", "continent", "population"],
+  });
+  res.send(bdCountry)
 }
 
 async function getByName(req, res) {
   const { name } = req.query;
-  try {
-    var countryName = await getAllToDb(name).filter((el) =>
-      el.name.toLowerCase().includes(name.toLowerCase())
-    );
-    countryName.length
-      ? res.status(200).send(countryName)
-      : res.status(404).send("Country does't exist...");
-  } catch (error) {
-    console.log(error);
-  }
+  const response = await Country.findAll({
+    where: { name: { [Op.startsWith]: name } },
+  });
+  res.send(response);
 }
 
 async function getById(req, res) {
   const { id } = req.params;
-  const allCountries = await getAllToDb();
-  console.log(allCountries)
-  if (id) {
-    const idCountry = allCountries.filter((c) => c.id == id.toUpperCase());
-    idCountry.length
-      ? res.send(idCountry)
-      : res.status(404).send("Country does't exist...");
+  const allCountries = await Country.findAll({
+    where: {id : {[Op.startsWith]: id}}
+  });
+  res.send(allCountries)
   }
-}
+
 
 module.exports = {
   getAllToDb,
   getById,
   getByName,
+  getAllCountries
 };
