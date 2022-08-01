@@ -48,7 +48,7 @@ async function getAllToDb(req, res, next) {
 }
 async function getAllCountries(req, res) {
   const bdCountry = await Country.findAll({
-    attributes: ["flag", "name", "continent", "population"],
+    attributes: ["flag", "name", "continent", "population","id", "subregion","area","capital"],
   });
   res.send(bdCountry)
 }

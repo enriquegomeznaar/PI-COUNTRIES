@@ -6,6 +6,7 @@ import {
   filterByContinent,
   filterPopulation,
   filterSort,
+  getContinents,
   getCountries,
 } from "../actions/actions";
 import Card from "./card";
@@ -24,7 +25,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
-    padding: "10px",
+    padding: "50px",
   },
   link: {
     color: "#CCCCCC",
@@ -39,7 +40,7 @@ const styles = {
   cards: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
-    gap: "50px",
+    gap: "100px",
   },
   botonReload: {
     borderRadius: "10px",
@@ -64,15 +65,14 @@ export default function Home() {
   const pagination = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  // useEffect(()=>{
 
-  // }, [allCountries])
 
   useEffect(() => {
     dispatch(getCountries());
+    dispatch(getContinents())
   }, [dispatch]);
   useEffect(()=>{
-    console.log(allCountries,'allcountries')
+    // console.log(allCountries,'allcountries')
   }, [allCountries])
 
   const handleClick = (e) => {
@@ -150,7 +150,9 @@ export default function Home() {
         {currentCountries?.length
           ? currentCountries.map((c) => {
               return (
+                <Link to={`/detail/${c.id}`}>
                 <Card name={c.name} flag={c.flag} continent={c.continent} />
+                </Link>
               );
             })
           : "Loading..."}

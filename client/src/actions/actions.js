@@ -6,6 +6,8 @@ export const FILTER_BY_CONTINENT = "FILTER_BY_CONTINENT";
 export const GET_BY_NAME = "GET_BY_NAME";
 export const POST_ACTIVITY = "POST_ACTIVITY";
 export const GET_ACTIVITIES = "GET_ACTIVITIES";
+export const GET_DETAIL = "GET_DETAIL";
+export const GET_CONTINENTS = "GET_CONTINENTS";
 export function getCountries() {
   return async function (dispatch) {
     const json = await axios.get("http://www.localhost:3001/country");
@@ -49,10 +51,34 @@ export function filterPopulation(payload) {
     payload,
   };
 }
+export function getContinents() {
+  return async function (dispatch) {
+    const resp = await axios.get("http://www.localhost:3001/country");
+    {console.log(resp.data)}
+    return dispatch({
+      type: GET_CONTINENTS,
+      payload: resp.data.continent
+    });
+
+  };
+}
 
 export function filterByContinent(payload) {
   return {
     type: FILTER_BY_CONTINENT,
     payload,
+  };
+}
+export function getDetail(id) {
+  return async function (dispatch) {
+    try {
+      const json = await axios.get(`http://www.localhost:3001/country/${id}`);
+      return dispatch({
+        type: GET_DETAIL,
+        payload: json.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 }

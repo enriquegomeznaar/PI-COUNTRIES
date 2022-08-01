@@ -6,11 +6,15 @@ import {
   GET_BY_NAME,
   POST_ACTIVITY,
   GET_ACTIVITIES,
+  GET_DETAIL,
+  GET_CONTINENTS,
 } from "../actions/actions";
 const initialState = {
   countries: [],
   allCountries: [],
   activities: [],
+  details: [],
+  continents: [],
 };
 export default function rootReducer(state = initialState, action) {
   switch (action.type) {
@@ -20,11 +24,23 @@ export default function rootReducer(state = initialState, action) {
         countries: action.payload,
         allCountries: action.payload,
       };
+      case GET_CONTINENTS:
+        return {
+          ...state,
+          continents: action.payload
+          
+        }
+        
     case GET_ACTIVITIES:
       return {
         ...state,
         activities: action.payload,
       };
+      case GET_DETAIL:
+        return{
+          ...state,
+          details: action.payload
+        }
     case GET_BY_NAME:
       return {
         ...state,
