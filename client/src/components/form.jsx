@@ -2,7 +2,8 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCountries, postActivity } from "../actions/actions";
+import { getCountries } from "../actions/actions";
+import { postActivity } from "../services/activities";
 
 const styles = {
   label: {
@@ -25,8 +26,8 @@ export default function Form() {
     name: "",
     difficulty: [],
     duration: 0,
-    season: [],
-    countries: [],
+    seasons: [],
+    countryId: null,
   });
 
   const handleChange = (e) => {
@@ -41,22 +42,32 @@ export default function Form() {
       })
     );
   };
-  const handlerSelect = (e) => {
+  const handleChangeSeason = (e) => {
     setInput({
       ...input,
-      countries: [...input.countries, e.target.value],
+      seasons: [...input.seasons, e.target.value],
+    });
+  };
+  const handlerSelect = (e) => {
+    const countryName = e.target.value;
+    const country = countries.find((country) => country.name == countryName);
+    setInput({
+      ...input,
+      countryId: country.id,
     });
   };
 
   const handlerSubmit = (e) => {
     e.preventDefault();
-    dispatch(postActivity(input));
+    input.seasons = input.seasons.toString();
+    postActivity(input);
     alert("Activity created succesfully!");
     setInput({
       name: "",
       difficulty: [],
       duration: 0,
       season: [],
+      countryId: null,
     });
     history.push("/home");
   };
@@ -120,28 +131,28 @@ export default function Form() {
             type="checkbox"
             value="summer"
             name="summer"
-            onChange={(e) => handleChange(e)}
+            onChange={(e) => handleChangeSeason(e)}
           />
           <label> Spring:</label>
           <input
             type="checkbox"
             value="spring"
             name="spring"
-            onChange={(e) => handleChange(e)}
+            onChange={(e) => handleChangeSeason(e)}
           />
           <label> Winter:</label>
           <input
             type="checkbox"
             value="winter"
             name="winter"
-            onChange={(e) => handleChange(e)}
+            onChange={(e) => handleChangeSeason(e)}
           />
           <label> Fall:</label>
           <input
             type="checkbox"
             value="fall"
             name="fall"
-            onChange={(e) => handleChange(e)}
+            onChange={(e) => handleChangeSeason(e)}
           />
         </div>
         <div>
@@ -149,7 +160,9 @@ export default function Form() {
           <select onChange={(e) => handlerSelect(e)}>
             {console.log(countries)}
             {countries.map((d) => (
-              <option value={d.name}>{d.name}</option>
+              <option name={d.id} value={d.name}>
+                {d.name}
+              </option>
             ))}
           </select>
         </div>

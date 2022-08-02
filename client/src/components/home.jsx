@@ -6,6 +6,7 @@ import {
   filterByContinent,
   filterPopulation,
   filterSort,
+  getActivities,
   getContinents,
   getCountries,
 } from "../actions/actions";
@@ -53,6 +54,7 @@ const styles = {
 export default function Home() {
   const dispatch = useDispatch();
   const allCountries = useSelector((state) => state.countries);
+  const activities = useSelector(state => state.activities)
   const [currentPage, setCurrentPage] = useState(1);
   const [countriesPerPage, setCountriesPerPage] = useState(10);
   const lastIndexCountry = currentPage * countriesPerPage; // 10
@@ -69,17 +71,23 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(getCountries());
+    dispatch(getActivities())
     dispatch(getContinents())
   }, [dispatch]);
   useEffect(()=>{
-    // console.log(allCountries,'allcountries')
-  }, [allCountries])
+     console.log(activities,'activities')
+  }, [activities])
 
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(getCountries());
     setCurrentPage(1)
   };
+
+  const getCountriesByActivity = (activityId) =>{
+    const activity = activities.filter(a => a.id === activityId)
+    // const countriesByActivity = allCountries.filter(c => )
+  }
 
   const handlerFilterByPopulation = (e) => {
     e.preventDefault();
@@ -134,6 +142,9 @@ export default function Home() {
           </select>
           <select>
             <option value="default">Activities</option>
+            { activities && activities.map((a)=>{
+              return <option onClick={getCountriesByActivity}>{a.name}</option>
+          })} 
           </select>
           <button
           onClick={(e) => {

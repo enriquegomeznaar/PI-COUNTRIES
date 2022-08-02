@@ -28,13 +28,23 @@ export function getByName(payload) {
     });
   };
 }
+export function getActivities(){
+  return async function (dispatch){
+    const json = await axios.get("http://www.localhost:3001/activities")
+    return dispatch({
+      type: GET_ACTIVITIES,
+      payload: json.data.activities
+    })
+  }
+
+}
 export function postActivity(payload) {
   return async function (dispatch) {
     const response = await axios.post(
       "http://www.localhost:3001/country",
       payload
     );
-    console.log(response);
+    // console.log(response);
     return response;
   };
 }

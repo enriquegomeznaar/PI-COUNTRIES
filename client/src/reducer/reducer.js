@@ -30,12 +30,13 @@ export default function rootReducer(state = initialState, action) {
           continents: action.payload
           
         }
-        
     case GET_ACTIVITIES:
+      // console.log(action,"action")
       return {
         ...state,
         activities: action.payload,
       };
+
       case GET_DETAIL:
         return{
           ...state,
