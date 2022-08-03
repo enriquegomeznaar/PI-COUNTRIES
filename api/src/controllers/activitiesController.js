@@ -3,13 +3,17 @@ const Country = require("../models/Country");
 
 const activitiesController = {
   create: async function (req, res) {
-    const {name, difficulty, duration, seasons, countryId} = req.body
+    const {name, difficulty, duration, seasons, countriesId} = req.body
     console.log(req.body,"body")
     try {
        const newActivity = await db.Activities.create({name,difficulty,duration,seasons})
-       const country = await db.Country.findByPk( countryId )
-       console.log(country)
-       newActivity.addCountry(country)
+       //const country = await db.Country.findByPk( countryId )
+       //console.log(country)
+        countriesId.forEach(async(country_id)=> {
+        const newCountry = await db.Country.findByPk(country_id)
+        await newActivity.addCountry(newCountry)
+       })
+       //newActivity.addCountry(country)
        res.status(200).json({message:'Created', statusCode:200, newActivity})
     } catch (error) {
         res.status(400).json({message:'Error al crear la actividad ' + error, statusCode:400})

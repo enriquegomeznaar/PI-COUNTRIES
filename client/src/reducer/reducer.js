@@ -8,6 +8,8 @@ import {
   GET_ACTIVITIES,
   GET_DETAIL,
   GET_CONTINENTS,
+  CLEAR_DETAIL,
+  GET_BY_ACTIVITY,
 } from "../actions/actions";
 const initialState = {
   countries: [],
@@ -16,7 +18,9 @@ const initialState = {
   details: [],
   continents: [],
 };
+
 export default function rootReducer(state = initialState, action) {
+  
   switch (action.type) {
     case GET_COUNTRIES:
       return {
@@ -38,15 +42,31 @@ export default function rootReducer(state = initialState, action) {
       };
 
       case GET_DETAIL:
+        console.log(action,"action")
         return{
           ...state,
-          details: action.payload
+          details: action.payload[0],
         }
+        case CLEAR_DETAIL:
+      return {
+        ...state,
+        details: [],
+      };
     case GET_BY_NAME:
       return {
         ...state,
         countries: action.payload,
       };
+      case GET_BY_ACTIVITY:
+         const id = action.payload
+         const listActivity = state.activities.filter(a => a.id == id)
+         console.log(action.payload)
+         let countriesByActivity = listActivity[0].countries
+         console.log(id)
+        return{
+          ...state,
+          countries: countriesByActivity
+        }
     case POST_ACTIVITY:
       return {
         ...state,

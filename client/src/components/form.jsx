@@ -24,23 +24,18 @@ export default function Form() {
 
   const [input, setInput] = useState({
     name: "",
-    difficulty: [],
-    duration: 0,
-    seasons: [],
-    countryId: null,
+    difficulty: "",
+    duration: "",
+    seasons: "",
+    countriesId: [],
   });
+  const [disableButton, setDisableButton] = useState(true);
 
   const handleChange = (e) => {
     setInput({
       ...input,
       [e.target.name]: e.target.value,
     });
-    setErrors(
-      validate({
-        ...input,
-        [e.target.name]: e.target.value,
-      })
-    );
   };
   const handleChangeSeason = (e) => {
     setInput({
@@ -48,15 +43,30 @@ export default function Form() {
       seasons: [...input.seasons, e.target.value],
     });
   };
-  const handlerSelect = (e) => {
-    const countryName = e.target.value;
-    const country = countries.find((country) => country.name == countryName);
+  const handlerOnChangeSelect = (e) => {
+    let options = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
     setInput({
       ...input,
-      countryId: country.id,
+      [e.target.name]: [...input.countriesId, ...options],
     });
+    console.log(input.countriesId);
   };
-
+  useEffect(() => {
+    if (!input.name) {
+      setDisableButton(true);
+    } else if (!input.duration) {
+      setDisableButton(true);
+    } else if (!input.difficulty) {
+      setDisableButton(true);
+    } else if (!input.seasons) {
+      setDisableButton(true);
+    } else if (input.countriesId.length == 0) {
+      setDisableButton(true);
+    } else setDisableButton(false);
+  }, [input]);
   const handlerSubmit = (e) => {
     e.preventDefault();
     input.seasons = input.seasons.toString();
@@ -64,27 +74,13 @@ export default function Form() {
     alert("Activity created succesfully!");
     setInput({
       name: "",
-      difficulty: [],
-      duration: 0,
-      season: [],
-      countryId: null,
+      difficulty: "",
+      duration: "",
+      seasons: "",
+      countriesId: [],
     });
     history.push("/home");
   };
-  function validate(input) {
-    let errors = {};
-
-    if (!input.name) {
-      errors.name = "name is require";
-    } else if (!input.difficulty) {
-      errors.difficulty = "introduce the difficulty";
-    } else if (!input.duration) {
-      errors.duration = "introduce duration";
-    } else if (!input.season) {
-      errors.season = "select a season";
-    }
-    return errors;
-  }
 
   return (
     <div>
@@ -129,45 +125,50 @@ export default function Form() {
           <label> Summer:</label>
           <input
             type="checkbox"
-            value="summer"
+            value="Summer"
             name="summer"
             onChange={(e) => handleChangeSeason(e)}
           />
           <label> Spring:</label>
           <input
             type="checkbox"
-            value="spring"
+            value="Spring"
             name="spring"
             onChange={(e) => handleChangeSeason(e)}
           />
           <label> Winter:</label>
           <input
             type="checkbox"
-            value="winter"
+            value="Winter"
             name="winter"
             onChange={(e) => handleChangeSeason(e)}
           />
           <label> Fall:</label>
           <input
             type="checkbox"
-            value="fall"
+            value="Fall"
             name="fall"
             onChange={(e) => handleChangeSeason(e)}
           />
         </div>
         <div>
           <label style={styles.label}>Where?</label>
-          <select onChange={(e) => handlerSelect(e)}>
-            {console.log(countries)}
-            {countries.map((d) => (
-              <option name={d.id} value={d.name}>
-                {d.name}
-              </option>
-            ))}
+          <select
+            onChange={handlerOnChangeSelect}
+            multiple={true}
+            name="countriesId"
+            value={input.countriesId}
+          >
+            {countries &&
+              countries.map((country) => (
+                <option value={country.id}>{country.name}</option>
+              ))}
           </select>
         </div>
         <div>
-          <button type="submit">Create</button>
+          <button type="submit" disabled={disableButton}>
+            Create
+          </button>
         </div>
       </form>
     </div>

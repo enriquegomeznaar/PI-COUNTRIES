@@ -2,6 +2,7 @@ const axios = require("axios");
 const { Country, Activities } = require("../db");
 const url = "https://restcountries.com/v3/all";
 const { Op } = require("sequelize");
+const db = require("../db");
 
 async function getApi() {
   try {
@@ -64,8 +65,9 @@ async function getByName(req, res) {
 async function getById(req, res) {
   const { id } = req.params;
   const allCountries = await Country.findAll({
-    where: {id : {[Op.startsWith]: id}}
-  });
+    include: [{model: db.Activities}],
+    where: {id :id}
+  })
   res.send(allCountries)
   }
 

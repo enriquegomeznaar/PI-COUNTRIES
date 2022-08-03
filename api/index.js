@@ -1,4 +1,4 @@
-const  {getAllToDb} = require('./src/controllers/country.js');
+const  {getAllToDb} = require('./src/controllers/countryController.js');
 //                       _oo0oo_
 //                      o8888888o
 //                      88" . "88

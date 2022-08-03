@@ -7,6 +7,7 @@ import {
   filterPopulation,
   filterSort,
   getActivities,
+  getByActivity,
   getContinents,
   getCountries,
 } from "../actions/actions";
@@ -34,9 +35,9 @@ const styles = {
     borderRadius: "20px",
     padding: "10px",
     letterSpacing: "5px",
-    fontWeight:'bold',
-    textDecoration:'none',
-    border:'1px solid #ccc',
+    fontWeight: "bold",
+    textDecoration: "none",
+    border: "1px solid #ccc",
   },
   cards: {
     display: "grid",
@@ -48,13 +49,13 @@ const styles = {
     outline: "none",
     padding: "3px 10px",
     cursor: "pointer",
-    border:'none'
+    border: "none",
   },
 };
 export default function Home() {
   const dispatch = useDispatch();
   const allCountries = useSelector((state) => state.countries);
-  const activities = useSelector(state => state.activities)
+  const activities = useSelector((state) => state.activities);
   const [currentPage, setCurrentPage] = useState(1);
   const [countriesPerPage, setCountriesPerPage] = useState(10);
   const lastIndexCountry = currentPage * countriesPerPage; // 10
@@ -67,27 +68,25 @@ export default function Home() {
   const pagination = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
+  //  const [countriesSelect, setCountriesSelect] = useState(countriesSelect)
 
   useEffect(() => {
     dispatch(getCountries());
-    dispatch(getActivities())
-    dispatch(getContinents())
+    dispatch(getActivities());
+    dispatch(getContinents());
   }, [dispatch]);
-  useEffect(()=>{
-     console.log(activities,'activities')
-  }, [activities])
+  useEffect(() => {}, [activities]);
 
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(getCountries());
-    setCurrentPage(1)
+    setCurrentPage(1);
   };
 
-  const getCountriesByActivity = (activityId) =>{
-    const activity = activities.filter(a => a.id === activityId)
-    // const countriesByActivity = allCountries.filter(c => )
-  }
+  const getCountriesByActivity = (e) => {
+    const id = e.target.value;
+    dispatch(getByActivity(id));
+  };
 
   const handlerFilterByPopulation = (e) => {
     e.preventDefault();
@@ -140,20 +139,21 @@ export default function Home() {
               );
             })}
           </select>
-          <select>
+          <select onChange={(e) => getCountriesByActivity(e)}>
             <option value="default">Activities</option>
-            { activities && activities.map((a)=>{
-              return <option onClick={getCountriesByActivity}>{a.name}</option>
-          })} 
+            {activities &&
+              activities.map((a) => {
+                return <option value={a.id}>{a.name}</option>;
+              })}
           </select>
           <button
-          onClick={(e) => {
-            handleClick(e);
-          }}
-          style={styles.botonReload}
-        >
-          Reaload
-        </button>
+            onClick={(e) => {
+              handleClick(e);
+            }}
+            style={styles.botonReload}
+          >
+            Reaload
+          </button>
         </div>
       </div>
 
@@ -162,7 +162,7 @@ export default function Home() {
           ? currentCountries.map((c) => {
               return (
                 <Link to={`/detail/${c.id}`}>
-                <Card name={c.name} flag={c.flag} continent={c.continent} />
+                  <Card name={c.name} flag={c.flag} continent={c.continent} />
                 </Link>
               );
             })
