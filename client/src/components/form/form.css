@@ -1,0 +1,8 @@
+.label {
+  font-weight: "bold";
+}
+.error {
+  font-family: "Times new roman";
+  color: "red";
+  font-size: "15px";
+}

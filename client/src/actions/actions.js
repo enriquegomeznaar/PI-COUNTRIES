@@ -9,7 +9,7 @@ export const GET_ACTIVITIES = "GET_ACTIVITIES";
 export const GET_DETAIL = "GET_DETAIL";
 export const GET_CONTINENTS = "GET_CONTINENTS";
 export const CLEAR_DETAIL = "CLEAR_DETAIL";
-export const GET_BY_ACTIVITY = "GET_BY_ACTIVITY"
+export const GET_BY_ACTIVITY = "GET_BY_ACTIVITY";
 export function getCountries() {
   return async function (dispatch) {
     const json = await axios.get("http://www.localhost:3001/country");
@@ -30,11 +30,11 @@ export function getByName(payload) {
     });
   };
 }
-export function getByActivity(payload){
+export function getByActivity(payload) {
   return {
     type: GET_BY_ACTIVITY,
-    payload
-  }
+    payload,
+  };
 }
 export function getActivities() {
   return async function (dispatch) {
@@ -71,9 +71,7 @@ export function filterPopulation(payload) {
 export function getContinents() {
   return async function (dispatch) {
     const resp = await axios.get("http://www.localhost:3001/country");
-    {
-      console.log(resp.data);
-    }
+  
     return dispatch({
       type: GET_CONTINENTS,
       payload: resp.data.continent,
@@ -82,9 +80,21 @@ export function getContinents() {
 }
 
 export function filterByContinent(payload) {
-  return {
-    type: FILTER_BY_CONTINENT,
-    payload,
+  return async function (dispatch) {
+    let json = await axios.get("http://www.localhost:3001/country");
+    let continents = json.data.map((el) => {
+      return el.continent;
+    });
+    console.log(json)
+    let filterContinents = new Set(continents);
+    let continentsArray = [...filterContinents];
+    continentsArray.unshift("default");
+    console.log(filterContinents, "cgl")
+
+    return dispatch({
+      type: FILTER_BY_CONTINENT,
+      payload: continentsArray,
+    });
   };
 }
 export function getDetail(id) {

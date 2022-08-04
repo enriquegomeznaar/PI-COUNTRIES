@@ -28,14 +28,15 @@ export default function rootReducer(state = initialState, action) {
         countries: action.payload,
         allCountries: action.payload,
       };
-      case GET_CONTINENTS:
+      case FILTER_BY_CONTINENT:
+        console.log(action,"action")
+        
         return {
           ...state,
           continents: action.payload
           
         }
     case GET_ACTIVITIES:
-      // console.log(action,"action")
       return {
         ...state,
         activities: action.payload,

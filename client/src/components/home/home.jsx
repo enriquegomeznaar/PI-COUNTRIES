@@ -10,51 +10,17 @@ import {
   getByActivity,
   getContinents,
   getCountries,
-} from "../actions/actions";
-import Card from "./card";
-import Pagination from "./pagination";
-import SearchBar from "./searchBar";
-const styles = {
-  h1: {
-    fontSize: "80px",
-    margin: "0px",
-    color: "black",
-    position: "relative",
-    letterSpacing: "5px",
-    textShadow: "5px",
-  },
-  navbar: {
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    padding: "50px",
-  },
-  link: {
-    color: "#CCCCCC",
-    fontSize: "20px",
-    borderRadius: "20px",
-    padding: "10px",
-    letterSpacing: "5px",
-    fontWeight: "bold",
-    textDecoration: "none",
-    border: "1px solid #ccc",
-  },
-  cards: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "100px",
-  },
-  botonReload: {
-    borderRadius: "10px",
-    outline: "none",
-    padding: "3px 10px",
-    cursor: "pointer",
-    border: "none",
-  },
-};
+} from "../../actions/actions";
+import Card from "../cards/card";
+import Pagination from "../pagination/pagination";
+import SearchBar from "../searchBar/searchBar";
+import home from "./home.css";
+
 export default function Home() {
   const dispatch = useDispatch();
   const allCountries = useSelector((state) => state.countries);
+  const continents = useSelector(state => state.continents)
+  console.log(continents)
   const activities = useSelector((state) => state.activities);
   const [currentPage, setCurrentPage] = useState(1);
   const [countriesPerPage, setCountriesPerPage] = useState(10);
@@ -68,14 +34,13 @@ export default function Home() {
   const pagination = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  //  const [countriesSelect, setCountriesSelect] = useState(countriesSelect)
 
   useEffect(() => {
     dispatch(getCountries());
+    // dispatch(getContinents())
     dispatch(getActivities());
-    dispatch(getContinents());
   }, [dispatch]);
-  useEffect(() => {}, [activities]);
+  // useEffect(() => {}, [activities]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -109,10 +74,10 @@ export default function Home() {
 
   return (
     <div>
-      <h1 style={styles.h1}>Country Page</h1>
+      <h1 className="h1">Country Page</h1>
 
-      <div style={styles.navbar}>
-        <Link style={styles.link} to="/form">
+      <div className="navbar">
+        <Link className="link" to="/form">
           Create activity
         </Link>
         <div>
@@ -131,7 +96,8 @@ export default function Home() {
           </select>
           <select onChange={(e) => handlerFilterByContinent(e)}>
             <option value="default">Continent</option>
-            {allCountries?.map((c, i) => {
+            {continents?.map((c, i) => {
+              console.log(continents)
               return (
                 <option value={c.continent} key={i}>
                   {c.continent[0].toUpperCase() + c.continent.slice(1)}
@@ -150,14 +116,14 @@ export default function Home() {
             onClick={(e) => {
               handleClick(e);
             }}
-            style={styles.botonReload}
+            className="buttonReload"
           >
             Reaload
           </button>
         </div>
       </div>
 
-      <div style={styles.cards}>
+      <div className="cards">
         {currentCountries?.length
           ? currentCountries.map((c) => {
               return (

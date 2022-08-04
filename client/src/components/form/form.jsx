@@ -2,19 +2,10 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCountries } from "../actions/actions";
-import { postActivity } from "../services/activities";
+import { getCountries } from "../../actions/actions";
+import { postActivity } from "../../services/activities";
+import form from "./form.css"
 
-const styles = {
-  label: {
-    fontWeight: "bold",
-  },
-  error: {
-    fontFamily: "Times new roman",
-    color: "red",
-    fontSize: "15px",
-  },
-};
 export default function Form() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -88,17 +79,17 @@ export default function Form() {
       <h1>Create your activity</h1>
       <form onSubmit={(e) => handlerSubmit(e)}>
         <div>
-          <label style={styles.label}>Activity name: </label>
+          <label>Activity name: </label>
           <input
             type="text"
             value={input.name}
             name="name"
             onChange={(e) => handleChange(e)}
           />
-          {errors.name && <p style={styles.error}>{errors.name}</p>}
+          {errors.name && <p className="error">{errors.name}</p>}
         </div>
         <div>
-          <label style={styles.label}>Difficulty: </label>
+          <label>Difficulty: </label>
           <input
             type="number"
             name="difficulty"
@@ -107,20 +98,20 @@ export default function Form() {
             onChange={(e) => handleChange(e)}
             value={input.difficulty}
           />
-          {errors.difficulty && <p style={styles.error}>{errors.difficulty}</p>}
+          {errors.difficulty && <p className="error">{errors.difficulty}</p>}
         </div>
         <div>
-          <label style={styles.label}>Duration: </label>
+          <label className="label">Duration: </label>
           <input
             type="time"
             name="duration"
             onChange={(e) => handleChange(e)}
             value={input.duration}
           />
-          {errors.duration && <p style={styles.error}>{errors.duration}</p>}
+          {errors.duration && <p className="error">{errors.duration}</p>}
         </div>
         <div>
-          <label style={styles.label}>Season </label>
+          <label className="label">Season </label>
 
           <label> Summer:</label>
           <input
@@ -152,7 +143,7 @@ export default function Form() {
           />
         </div>
         <div>
-          <label style={styles.label}>Where?</label>
+          <label className="label">Where?</label>
           <select
             onChange={handlerOnChangeSelect}
             multiple={true}
