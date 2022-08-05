@@ -18,6 +18,7 @@ async function getApi() {
         subregion: c.subregion,
         area: c.area,
         population: c.population,
+        borders: c.borders?.toString(""),
       };
     });
     console.log(apiCountry);
@@ -40,41 +41,58 @@ async function getAllToDb(req, res, next) {
         subregion: el.subregion ? el.subregion : "dont have any...",
         area: el.area,
         population: el.population,
+        borders: el.borders,
       });
     });
-   
   } catch (error) {
     next;
   }
 }
 async function getAllCountries(req, res) {
   const bdCountry = await Country.findAll({
-    attributes: ["flag", "name", "continent", "population","id", "subregion","area","capital"],
+    attributes: [
+      "flag",
+      "name",
+      "continent",
+      "population",
+      "id",
+      "subregion",
+      "area",
+      "capital",
+      "borders",
+    ],
   });
-  res.send(bdCountry)
+  res.send(bdCountry);
 }
 
 async function getByName(req, res) {
-  const { name } = req.query;
-  const response = await Country.findAll({
-    where: { name: { [Op.startsWith]: name } },
-  });
-  res.send(response);
+  try {
+    const { name } = req.query;
+    const response = await Country.findAll({
+      where: { name: { [Op.startsWith]: name } },
+    });
+    res.send(response);
+  } catch (error) {
+    res.status(500).end();
+  }
 }
 
 async function getById(req, res) {
-  const { id } = req.params;
-  const allCountries = await Country.findAll({
-    include: [{model: db.Activities}],
-    where: {id :id}
-  })
-  res.send(allCountries)
+  try {
+    const { id } = req.params;
+    const allCountries = await Country.findAll({
+      include: [{ model: db.Activities }],
+      where: { id: id },
+    });
+    res.send(allCountries);
+  } catch (error) {
+    res.status(500).end();
   }
-
+}
 
 module.exports = {
   getAllToDb,
   getById,
   getByName,
-  getAllCountries
+  getAllCountries,
 };

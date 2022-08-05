@@ -2,7 +2,7 @@ import axios from "axios";
 export const GET_COUNTRIES = "GET_COUNTRIES";
 export const FILTER_POPULATION = "FILTER_POPULATION";
 export const FILTER_SORT = "FILTER_SORT";
-export const FILTER_BY_CONTINENT = "FILTER_BY_CONTINENT";
+export const FILTER_BY_CONTINENT = "FILER_BY_CONTINENT";
 export const GET_BY_NAME = "GET_BY_NAME";
 export const POST_ACTIVITY = "POST_ACTIVITY";
 export const GET_ACTIVITIES = "GET_ACTIVITIES";
@@ -10,6 +10,8 @@ export const GET_DETAIL = "GET_DETAIL";
 export const GET_CONTINENTS = "GET_CONTINENTS";
 export const CLEAR_DETAIL = "CLEAR_DETAIL";
 export const GET_BY_ACTIVITY = "GET_BY_ACTIVITY";
+
+
 export function getCountries() {
   return async function (dispatch) {
     const json = await axios.get("http://www.localhost:3001/country");
@@ -71,30 +73,19 @@ export function filterPopulation(payload) {
 export function getContinents() {
   return async function (dispatch) {
     const resp = await axios.get("http://www.localhost:3001/country");
+    const continents = resp.data.map(c=>c.continent)
   
     return dispatch({
       type: GET_CONTINENTS,
-      payload: resp.data.continent,
+      payload: continents,
     });
   };
 }
 
 export function filterByContinent(payload) {
-  return async function (dispatch) {
-    let json = await axios.get("http://www.localhost:3001/country");
-    let continents = json.data.map((el) => {
-      return el.continent;
-    });
-    console.log(json)
-    let filterContinents = new Set(continents);
-    let continentsArray = [...filterContinents];
-    continentsArray.unshift("default");
-    console.log(filterContinents, "cgl")
-
-    return dispatch({
-      type: FILTER_BY_CONTINENT,
-      payload: continentsArray,
-    });
+  return {
+    type: FILTER_BY_CONTINENT,
+    payload,
   };
 }
 export function getDetail(id) {

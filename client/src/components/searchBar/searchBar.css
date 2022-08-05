@@ -33,11 +33,14 @@
   cursor: pointer;
   border-radius: 50%;
   position: absolute;
-  right: -20px;
+  right: 0px;
   top: 10px;
-  color:#9fbcbf;
+  color:#9b9b9b;
   background-color: transparent;
   pointer-events: painted;
+}
+.btn:hover{
+  color: #4f5050;
 }
 .btn:focus ~ .input {
   width: 300px;

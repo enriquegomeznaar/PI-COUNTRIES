@@ -1,7 +1,30 @@
+.card-container{
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 20px 0px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+.card-container:hover{
+  background-color: rgba(255, 255, 255, 0.45);
+
+}
 .h3 {
-  font-size: "30px";
-  text-decoration: "none";
+  font-size: 20px;
+  color: white;
+  background-color: rgb(67, 67, 97);
+  border: 1px rgb(151, 148, 231) solid;
+  border-radius: 12px;
+  padding: 3px 12px;
+  width: 50%;
+  margin: auto;
 }
 .h5 {
-  font-size: "20px";
+  font-size: 15px;
+  color: white;
+  background-color: rgb(67, 67, 97);
+  border: 1px rgb(151, 148, 231) solid;
+  border-radius: 12px;
+  padding: 3px 12px;
+  width: 35%;
+  margin: 5px auto;
 }

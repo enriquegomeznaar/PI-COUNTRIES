@@ -20,7 +20,6 @@ const initialState = {
 };
 
 export default function rootReducer(state = initialState, action) {
-  
   switch (action.type) {
     case GET_COUNTRIES:
       return {
@@ -28,27 +27,41 @@ export default function rootReducer(state = initialState, action) {
         countries: action.payload,
         allCountries: action.payload,
       };
-      case FILTER_BY_CONTINENT:
-        console.log(action,"action")
-        
+    case GET_CONTINENTS:
+      return {
+        ...state,
+        continents: action.payload,
+      };
+
+    case FILTER_BY_CONTINENT:
+      if (action.payload == "default") {
+        return state;
+      } else {
+        let filterContinent = action.payload;
+
+        const filterCountries = state.allCountries.filter(
+          (country) => country.continent == filterContinent
+          );
+          console.log(state.allCountries, "continents")
+          console.log(filterCountries, "filterCountries");
         return {
           ...state,
-          continents: action.payload
-          
-        }
+          countries: filterCountries,
+        };
+      }
     case GET_ACTIVITIES:
       return {
         ...state,
         activities: action.payload,
       };
 
-      case GET_DETAIL:
-        console.log(action,"action")
-        return{
-          ...state,
-          details: action.payload[0],
-        }
-        case CLEAR_DETAIL:
+    case GET_DETAIL:
+      console.log(action, "action");
+      return {
+        ...state,
+        details: action.payload[0],
+      };
+    case CLEAR_DETAIL:
       return {
         ...state,
         details: [],
@@ -58,16 +71,16 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         countries: action.payload,
       };
-      case GET_BY_ACTIVITY:
-         const id = action.payload
-         const listActivity = state.activities.filter(a => a.id == id)
-         console.log(action.payload)
-         let countriesByActivity = listActivity[0].countries
-         console.log(id)
-        return{
-          ...state,
-          countries: countriesByActivity
-        }
+    case GET_BY_ACTIVITY:
+      const id = action.payload;
+      const listActivity = state.activities.filter((a) => a.id == id);
+      console.log(action.payload);
+      let countriesByActivity = listActivity[0].countries;
+      console.log(id);
+      return {
+        ...state,
+        countries: countriesByActivity,
+      };
     case POST_ACTIVITY:
       return {
         ...state,
@@ -119,46 +132,8 @@ export default function rootReducer(state = initialState, action) {
         default:
           return state;
       }
-    // let sortPop = state.allCountries.sort(function (a, b) {
-    //   return a.population - b.population;
-
-    // });
-    // if (action.payload === "low") sortPop = sortPop.reverse();
-    // console.log(sortPop);
-    // return {
-    //   ...state,
-    //   countries: sortPop,
-    // };
-    case FILTER_BY_CONTINENT:
-      const allCountries = state.countries;
-      const filterByContinent =
-        action.payload === "default"
-          ? allCountries
-          : allCountries.filter((c) =>
-              c.continent
-                ? c.continent.includes(action.payload)
-                : c.allCountries.map((t) => t.name).includes(action.payload)
-            );
-      return {
-        ...state,
-        countries: filterByContinent,
-      };
 
     default:
       return state;
   }
 }
-// case FILTER_BY_TYPES:
-//       const allPokemons = state.allPokemons;
-//       const filterTypes =
-//         action.payload === "default"
-//           ? allPokemons
-//           : allPokemons.filter((t) =>
-//               t.type
-//                 ? t.type.includes(action.payload)
-//                 : t.pokemonTypes.map((t) => t.name).includes(action.payload)
-//             );
-//       return {
-//         ...state,
-//         pokemons: filterTypes,
-//       };

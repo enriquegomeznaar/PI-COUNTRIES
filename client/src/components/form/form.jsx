@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCountries } from "../../actions/actions";
 import { postActivity } from "../../services/activities";
-import form from "./form.css"
+import form from "./form.css";
 
 export default function Form() {
   const dispatch = useDispatch();
@@ -20,6 +20,7 @@ export default function Form() {
     seasons: "",
     countriesId: [],
   });
+  const [countryName, setCountryName] = useState([]);
   const [disableButton, setDisableButton] = useState(true);
 
   const handleChange = (e) => {
@@ -39,12 +40,29 @@ export default function Form() {
       e.target.selectedOptions,
       (option) => option.value
     );
+    let names = Array.from(e.target.selectedOptions, (option) => option.text);
+    setCountryName([...countryName, ...names])
     setInput({
       ...input,
       [e.target.name]: [...input.countriesId, ...options],
     });
+
     console.log(input.countriesId);
   };
+
+  const removeFromList = (country)=>{
+    
+    const countryId = countries.find((c)=> c.name == country).id
+    console.log(countryId)
+    const newCountriesId = input.countriesId.filter((c)=> c !== countryId)
+    setInput({
+      ...input,
+      countriesId : newCountriesId
+    })
+    setCountryName(countryName.filter((c) => c !== country))
+    console.log(input.countriesId)
+
+  }
   useEffect(() => {
     if (!input.name) {
       setDisableButton(true);
@@ -149,6 +167,7 @@ export default function Form() {
             multiple={true}
             name="countriesId"
             value={input.countriesId}
+            className='select-country'
           >
             {countries &&
               countries.map((country) => (
@@ -162,6 +181,13 @@ export default function Form() {
           </button>
         </div>
       </form>
+      <ul id="selectedCountry">
+        {countryName.map((country) => (
+        
+          <li><div>{country} <button onClick={()=>removeFromList(country)}>X</button></div></li>
+
+        ))}
+      </ul>
     </div>
   );
 }

@@ -1,16 +1,17 @@
-.App {
+ .App {
   text-align: center;
-  font-family: 'Times new roman', cursive;
+  font-family: 'Roboto', cursive;
   padding:0;
   margin:0;
-  background-image: url(../public/imagen.webp);
-  opacity: 0.8;
+  background-image: url(../public/image.png);
+  opacity: 1;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover ;
   background-attachment: fixed;
   min-height: 100vh;
-}
+} 
+
 .div-contenedor{
   height: 100vh;
   margin: 0;

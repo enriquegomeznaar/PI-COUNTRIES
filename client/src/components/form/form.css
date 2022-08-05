@@ -6,3 +6,9 @@
   color: "red";
   font-size: "15px";
 }
+.select-country{
+  height: 250px;
+  width: 100px;
+  background-color: transparent ;
+  margin-top: 10px;
+}

@@ -2,7 +2,10 @@
   font-size: 80px;
   font-weight: 600px;
   margin: 0px;
-  color: black;
+  background-image: linear-gradient(to left, #4d7cc8, #000000);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
   position: relative;
   letter-spacing: 20px;
   text-shadow: 5px;
@@ -40,9 +43,15 @@
 }
 .cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 100px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 50px;
+  padding: 5px 20px;
 }
+.cards a {
+  text-decoration: none !important;
+  box-shadow: 0px 0px 7px rgba(36, 36, 36, 0.7);
+}
+
 .buttonReload {
   box-shadow: 3px 3px 15px 0px #899599;
   background: linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
@@ -68,4 +77,24 @@
   position: relative;
   top: 1px;
 }
-
+.container-filter{
+  display: inline;
+  
+}
+.filter{
+  padding: 2px 5px;
+  margin: 0px 3px;
+  background-color: #ededed;
+  border-radius: 20px;
+  border: 2px solid #d6bcd6;
+  cursor: pointer;
+}
+.filter:hover{
+  background-color: rgba(99, 99, 99, 0.7);
+}
+.filter option{
+  padding: 2px 5px;
+  margin: 0px 3px;
+  background-color: #ededed;
+  border-radius: 20px;
+}

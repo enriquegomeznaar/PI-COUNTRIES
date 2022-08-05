@@ -19,8 +19,8 @@ import home from "./home.css";
 export default function Home() {
   const dispatch = useDispatch();
   const allCountries = useSelector((state) => state.countries);
-  const continents = useSelector(state => state.continents)
-  console.log(continents)
+  const continents = useSelector((state) => state.continents);
+  console.log(continents);
   const activities = useSelector((state) => state.activities);
   const [currentPage, setCurrentPage] = useState(1);
   const [countriesPerPage, setCountriesPerPage] = useState(10);
@@ -34,10 +34,14 @@ export default function Home() {
   const pagination = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
+  let arrayContinents = new Set(continents);
+  console.log(arrayContinents);
+  let uniqueContinents = [...arrayContinents];
+  console.log(uniqueContinents);
+  // uniqueContinents.unshift("default")
   useEffect(() => {
     dispatch(getCountries());
-    // dispatch(getContinents())
+    dispatch(getContinents());
     dispatch(getActivities());
   }, [dispatch]);
   // useEffect(() => {}, [activities]);
@@ -84,34 +88,44 @@ export default function Home() {
           <SearchBar />
         </div>
         <div>
-          <select onChange={(e) => handlerFilterSort(e)}>
-            <option value="default">Order by name</option>
-            <option value="asc">Upward</option>
-            <option value="desc">Falling</option>
-          </select>
-          <select onChange={(e) => handlerFilterByPopulation(e)}>
-            <option value="default">Population</option>
-            <option value="high">Higher</option>
-            <option value="low">Lower</option>
-          </select>
-          <select onChange={(e) => handlerFilterByContinent(e)}>
-            <option value="default">Continent</option>
-            {continents?.map((c, i) => {
-              console.log(continents)
-              return (
-                <option value={c.continent} key={i}>
-                  {c.continent[0].toUpperCase() + c.continent.slice(1)}
-                </option>
-              );
-            })}
-          </select>
-          <select onChange={(e) => getCountriesByActivity(e)}>
-            <option value="default">Activities</option>
-            {activities &&
-              activities.map((a) => {
-                return <option value={a.id}>{a.name}</option>;
+          <div className="container-filter">
+            <select onChange={(e) => handlerFilterSort(e)} className="filter">
+              <option value="default">Order by name</option>
+              <option value="asc">Upward</option>
+              <option value="desc">Falling</option>
+            </select>
+            <select
+              onChange={(e) => handlerFilterByPopulation(e)}
+              className="filter"
+            >
+              <option value="default">Population</option>
+              <option value="high">Higher</option>
+              <option value="low">Lower</option>
+            </select>
+            <select
+              onChange={(e) => handlerFilterByContinent(e)}
+              className="filter"
+            >
+              <option value="default">Continent</option>
+              {uniqueContinents?.map((c, i) => {
+                return (
+                  <option value={c} key={i}>
+                    {c}
+                  </option>
+                );
               })}
-          </select>
+            </select>
+            <select
+              onChange={(e) => getCountriesByActivity(e)}
+              className="filter"
+            >
+              <option value="default">Activities</option>
+              {activities &&
+                activities.map((a) => {
+                  return <option value={a.id}>{a.name}</option>;
+                })}
+            </select>
+          </div>
           <button
             onClick={(e) => {
               handleClick(e);
