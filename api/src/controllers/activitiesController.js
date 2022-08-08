@@ -34,12 +34,6 @@ const activitiesController = {
       res.status(400).json({ message: error, statusCode: 400 });
     }
   },
-  delete: async function (req, res) {
-    const id = req.params.id;
-    await db.Activities.destroy({ where: { id: id } });
-    res.send("Deleted");
-  },
-  edit: async function (req, res) {},
 };
 
 module.exports = activitiesController;

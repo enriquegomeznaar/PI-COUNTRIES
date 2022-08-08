@@ -10,6 +10,7 @@ import {
   getByActivity,
   getContinents,
   getCountries,
+  getFiveCountries
 } from "../../actions/actions";
 import Card from "../cards/card";
 import Pagination from "../pagination/pagination";
@@ -20,7 +21,6 @@ export default function Home() {
   const dispatch = useDispatch();
   const allCountries = useSelector((state) => state.countries);
   const continents = useSelector((state) => state.continents);
-  console.log(continents);
   const activities = useSelector((state) => state.activities);
   const [currentPage, setCurrentPage] = useState(1);
   const [countriesPerPage, setCountriesPerPage] = useState(10);
@@ -35,16 +35,12 @@ export default function Home() {
     setCurrentPage(pageNumber);
   };
   let arrayContinents = new Set(continents);
-  console.log(arrayContinents);
   let uniqueContinents = [...arrayContinents];
-  console.log(uniqueContinents);
-  // uniqueContinents.unshift("default")
   useEffect(() => {
     dispatch(getCountries());
     dispatch(getContinents());
     dispatch(getActivities());
   }, [dispatch]);
-  // useEffect(() => {}, [activities]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -76,8 +72,9 @@ export default function Home() {
     setOrden(`Ordenado ${e.target.value}`);
   };
 
+
   return (
-    <div>
+    <div className="home-container">
       <h1 className="h1">Country Page</h1>
 
       <div className="navbar">
@@ -85,13 +82,14 @@ export default function Home() {
           Create activity
         </Link>
         <div>
-          <SearchBar />
+          <SearchBar setCurrentPage={setCurrentPage} />
         </div>
         <div>
+          
           <div className="container-filter">
             <select onChange={(e) => handlerFilterSort(e)} className="filter">
               <option value="default">Order by name</option>
-              <option value="asc">Upward</option>
+              <option className="option" value="asc">Upward</option>
               <option value="desc">Falling</option>
             </select>
             <select
@@ -121,8 +119,8 @@ export default function Home() {
             >
               <option value="default">Activities</option>
               {activities &&
-                activities.map((a) => {
-                  return <option value={a.id}>{a.name}</option>;
+                activities.map((a,i) => {
+                  return <option value={a.id} key={i}>{a.name}</option>;
                 })}
             </select>
           </div>

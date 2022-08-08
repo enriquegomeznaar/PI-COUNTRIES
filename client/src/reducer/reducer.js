@@ -10,6 +10,7 @@ import {
   GET_CONTINENTS,
   CLEAR_DETAIL,
   GET_BY_ACTIVITY,
+  GET_FIVE
 } from "../actions/actions";
 const initialState = {
   countries: [],
@@ -32,7 +33,7 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         continents: action.payload,
       };
-
+  
     case FILTER_BY_CONTINENT:
       if (action.payload == "default") {
         return state;
@@ -41,9 +42,7 @@ export default function rootReducer(state = initialState, action) {
 
         const filterCountries = state.allCountries.filter(
           (country) => country.continent == filterContinent
-          );
-          console.log(state.allCountries, "continents")
-          console.log(filterCountries, "filterCountries");
+        );
         return {
           ...state,
           countries: filterCountries,
@@ -55,28 +54,21 @@ export default function rootReducer(state = initialState, action) {
         activities: action.payload,
       };
 
-    case GET_DETAIL:
-      console.log(action, "action");
-      return {
-        ...state,
-        details: action.payload[0],
-      };
-    case CLEAR_DETAIL:
-      return {
-        ...state,
-        details: [],
-      };
     case GET_BY_NAME:
       return {
         ...state,
         countries: action.payload,
       };
+
+    case GET_DETAIL:
+      return {
+        ...state,
+        details: action.payload[0],
+      };
     case GET_BY_ACTIVITY:
       const id = action.payload;
       const listActivity = state.activities.filter((a) => a.id == id);
-      console.log(action.payload);
       let countriesByActivity = listActivity[0].countries;
-      console.log(id);
       return {
         ...state,
         countries: countriesByActivity,

@@ -1,15 +1,14 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getCountries } from "../../actions/actions";
+import { useSelector } from "react-redux";
 import { postActivity } from "../../services/activities";
 import form from "./form.css";
 
 export default function Form() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const history = useHistory();
-  const activities = useSelector((state) => state.activities);
+
   const countries = useSelector((state) => state.countries);
   const [errors, setErrors] = useState({});
 
@@ -41,28 +40,22 @@ export default function Form() {
       (option) => option.value
     );
     let names = Array.from(e.target.selectedOptions, (option) => option.text);
-    setCountryName([...countryName, ...names])
+    setCountryName([...countryName, ...names]);
     setInput({
       ...input,
       [e.target.name]: [...input.countriesId, ...options],
     });
-
-    console.log(input.countriesId);
   };
 
-  const removeFromList = (country)=>{
-    
-    const countryId = countries.find((c)=> c.name == country).id
-    console.log(countryId)
-    const newCountriesId = input.countriesId.filter((c)=> c !== countryId)
+  const removeFromList = (country) => {
+    const countryId = countries.find((c) => c.name === country).id;
+    const newCountriesId = input.countriesId.filter((c) => c !== countryId);
     setInput({
       ...input,
-      countriesId : newCountriesId
-    })
-    setCountryName(countryName.filter((c) => c !== country))
-    console.log(input.countriesId)
-
-  }
+      countriesId: newCountriesId,
+    });
+    setCountryName(countryName.filter((c) => c !== country));
+  };
   useEffect(() => {
     if (!input.name) {
       setDisableButton(true);
@@ -72,7 +65,7 @@ export default function Form() {
       setDisableButton(true);
     } else if (!input.seasons) {
       setDisableButton(true);
-    } else if (input.countriesId.length == 0) {
+    } else if (input.countriesId.length === 0) {
       setDisableButton(true);
     } else setDisableButton(false);
   }, [input]);
@@ -92,7 +85,7 @@ export default function Form() {
   };
 
   return (
-    <div>
+    <div className="div-form">
       <Link to="/home">Go back</Link>
       <h1>Create your activity</h1>
       <form onSubmit={(e) => handlerSubmit(e)}>
@@ -103,6 +96,7 @@ export default function Form() {
             value={input.name}
             name="name"
             onChange={(e) => handleChange(e)}
+            className="input-box"
           />
           {errors.name && <p className="error">{errors.name}</p>}
         </div>
@@ -115,6 +109,7 @@ export default function Form() {
             max="5"
             onChange={(e) => handleChange(e)}
             value={input.difficulty}
+            className="input-box"
           />
           {errors.difficulty && <p className="error">{errors.difficulty}</p>}
         </div>
@@ -125,6 +120,7 @@ export default function Form() {
             name="duration"
             onChange={(e) => handleChange(e)}
             value={input.duration}
+            className="input-box"
           />
           {errors.duration && <p className="error">{errors.duration}</p>}
         </div>
@@ -167,12 +163,13 @@ export default function Form() {
             multiple={true}
             name="countriesId"
             value={input.countriesId}
-            className='select-country'
+            className="select-country"
           >
             {countries &&
+                
               countries.map((country) => (
                 <option value={country.id}>{country.name}</option>
-              ))}
+                ))}
           </select>
         </div>
         <div>
@@ -183,9 +180,12 @@ export default function Form() {
       </form>
       <ul id="selectedCountry">
         {countryName.map((country) => (
-        
-          <li><div>{country} <button onClick={()=>removeFromList(country)}>X</button></div></li>
-
+          <li>
+            <div>
+              {country}{" "}
+              <button onClick={() => removeFromList(country)}>X</button>
+            </div>
+          </li>
         ))}
       </ul>
     </div>

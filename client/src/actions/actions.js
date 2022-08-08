@@ -10,6 +10,7 @@ export const GET_DETAIL = "GET_DETAIL";
 export const GET_CONTINENTS = "GET_CONTINENTS";
 export const CLEAR_DETAIL = "CLEAR_DETAIL";
 export const GET_BY_ACTIVITY = "GET_BY_ACTIVITY";
+export const GET_FIVE = "GET_FIVE"
 
 
 export function getCountries() {
@@ -32,6 +33,22 @@ export function getByName(payload) {
     });
   };
 }
+
+
+export function getDetail(id) {
+  return async function (dispatch) {
+    try {
+      const json = await axios.get(`http://www.localhost:3001/country/${id}`);
+      return dispatch({
+        type: GET_DETAIL,
+        payload: json.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
 export function getByActivity(payload) {
   return {
     type: GET_BY_ACTIVITY,
@@ -53,7 +70,6 @@ export function postActivity(payload) {
       "http://www.localhost:3001/country",
       payload
     );
-    // console.log(response);
     return response;
   };
 }
@@ -85,26 +101,6 @@ export function getContinents() {
 export function filterByContinent(payload) {
   return {
     type: FILTER_BY_CONTINENT,
-    payload,
-  };
-}
-export function getDetail(id) {
-  return async function (dispatch) {
-    try {
-      const json = await axios.get(`http://www.localhost:3001/country/${id}`);
-      console.log(id);
-      return dispatch({
-        type: GET_DETAIL,
-        payload: json.data,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-}
-export function clearDetail(payload) {
-  return {
-    type: CLEAR_DETAIL,
     payload,
   };
 }

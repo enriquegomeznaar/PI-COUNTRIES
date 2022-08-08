@@ -18,10 +18,8 @@ async function getApi() {
         subregion: c.subregion,
         area: c.area,
         population: c.population,
-        borders: c.borders?.toString(""),
       };
     });
-    console.log(apiCountry);
     return apiCountry;
   } catch (error) {
     console.log(error);
@@ -41,7 +39,6 @@ async function getAllToDb(req, res, next) {
         subregion: el.subregion ? el.subregion : "dont have any...",
         area: el.area,
         population: el.population,
-        borders: el.borders,
       });
     });
   } catch (error) {
@@ -59,7 +56,6 @@ async function getAllCountries(req, res) {
       "subregion",
       "area",
       "capital",
-      "borders",
     ],
   });
   res.send(bdCountry);

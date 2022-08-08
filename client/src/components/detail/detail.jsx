@@ -13,21 +13,14 @@ export default function Detail(props) {
   useEffect(() => {
     setCountry(res[0]);
     dispatch(getDetail(id));
-    console.log(res)
   }, [dispatch]);
-  useEffect(() => {
-    dispatch(clearDetail());
-    setCountry(res[0]);
-  }, [dispatch]);
-  useEffect(() => {
-    console.log(res, "res");
-  });
+
+
   return (
     <div className="container-detail">
-      
       {res ? (
         <div className="detail">
-          <img src={res.flag} alt="load"  />
+          <img src={res.flag} alt="load" />
           <div>
             <h1 className="color">Name: {res.name}</h1>
             <h2 className="color">ID: {res.id}</h2>
@@ -36,7 +29,6 @@ export default function Detail(props) {
             <h5 className="color">Population: {res.population}</h5>
             <h5 className="color">Subregion: {res.subregion}</h5>
             <h5 className="color">Capital: {res.capital}</h5>
-            <h5>Borders:  { res.borders? res.borders : "No tiene fronteras..."}</h5>
             <h5 className="color">
               Activities:{" "}
               {res.activities?.map((a) => {
@@ -44,7 +36,6 @@ export default function Detail(props) {
               })}
             </h5>
           </div>
-          {/* activity */}
         </div>
       ) : (
         "Error"

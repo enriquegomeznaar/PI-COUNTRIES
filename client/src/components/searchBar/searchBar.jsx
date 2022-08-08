@@ -1,17 +1,17 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getByName } from "../../actions/actions";
-import searchBar from "./searchBar.css"
+import { getByName, GET_BY_NAME } from "../../actions/actions";
+import searchBar from "./searchBar.css";
 
-export default function SearchBar() {
+export default function SearchBar({setCurrentPage}) {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
 
   const handlerInput = (e) => {
     e.preventDefault();
-    const value = e.target.value
-    const value2 = value.charAt(0).toUpperCase() + value.slice(1)
+    const value = e.target.value;
+    const value2 = value.charAt(0).toUpperCase() + value.slice(1);
     setName(value2);
   };
 
@@ -19,6 +19,7 @@ export default function SearchBar() {
     e.preventDefault();
     dispatch(getByName(name));
     setName("");
+    setCurrentPage(1)
   };
   useEffect(() => {
     dispatch(getByName(name));
@@ -32,13 +33,8 @@ export default function SearchBar() {
         value={name}
         onChange={(e) => handlerInput(e)}
       ></input>
-      <button
-        className="btn"
-        
-        type="submit"
-        onClick={(e) => handlerButton(e)}
-      >
-       Go
+      <button className="btn" type="submit" onClick={(e) => handlerButton(e)}>
+        Go
       </button>
     </div>
   );
